@@ -16,9 +16,17 @@ public class UserService {
 //        if (user != null) {
 //            throw new RuntimeException("동일한 username이 존재합니다.");
 //        }
-
+        User user = joinDTO.toEntity();  // 1. 비영속객체
+        System.out.println("비영속 user: " + user.getId());
         // 회원가입
-        userRepository.save(joinDTO.toEntity());
+        userRepository.save(user);
+        // user 객체
+        System.out.println("영속/동기화 user: " + user.getId());
+
+        // TODO: 정리하기
+//        System.out.println("===============================");
+//        userRepository.findById(3);  // pc에서 찾는다 -> 캐싱
+//        System.out.println("===============================");
     }
 
     public User 로그인(UserRequest.LoginDTO loginDTO) {

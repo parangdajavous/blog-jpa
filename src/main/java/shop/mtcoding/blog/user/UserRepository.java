@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository;
 public class UserRepository {
     private final EntityManager em;
 
+    public User findById(int id) {
+        return em.find(User.class, id);  // persisrtent context에서 찾는다
+    }
+
     /*
         1. createNativeQuery -> 기본 쿼리
         2. createQuery -> JPA가 제공해주는 객체지향 쿼리
@@ -25,6 +29,7 @@ public class UserRepository {
     }
 
     public void save(User user) {
-        em.persist(user);  // insert query 발동
+        em.persist(user);  // insert query 발동 // 2. user 영속객체
+        // 3. user는 DataBase와 동기화됨
     }
 }
