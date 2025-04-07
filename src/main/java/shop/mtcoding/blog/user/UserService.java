@@ -57,5 +57,5 @@ public class UserService {
 
         user.update(updateDTO.getPassword(), updateDTO.getEmail());  // 영속화된 객체의 상태변경
         return user;
-    }  // 함수 종료될 때 더티체킹 -> 상태가 변경되면 변경된 data를 가지고 update을 한다
+    }  // 함수 종료될 때 더티 체킹(Dirty Checking) -> 상태가 변경되면 변경된 data를 가지고 update을 한다
 }

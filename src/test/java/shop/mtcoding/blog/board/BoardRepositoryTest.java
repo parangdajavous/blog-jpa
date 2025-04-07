@@ -36,4 +36,15 @@ public class BoardRepositoryTest {
         }
     }
 
+    @Test
+    public void findByIdJoinUser_test() {
+        // given
+        Integer id = 1;
+
+        // when
+        boardRepository.findByIdJoinUser(id);
+
+        // eye
+    }
+
 }

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.user.User;
 
@@ -45,5 +46,17 @@ public class BoardController {
         if (sessionUser == null) throw new RuntimeException("인증이 필요합니다.");
 
         return "board/save-form";
+    }
+
+    @GetMapping("/board/{id}")
+    public String detail(@PathVariable("id") Integer id, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        // 비로그인 시 상세보기
+        Integer sessionUserId = (sessionUser == null ? null : sessionUser.getId());
+
+        BoardResponse.DetailDTO detailDTO = boardService.글상세보기(id, sessionUserId);
+        request.setAttribute("model", detailDTO);
+        return "board/detail";
     }
 }
