@@ -30,4 +30,8 @@ public class UserRepository {
     public void save(User user) {
         em.persist(user);  // insert query 발동
     }
+
+    public User findById(Integer id) {
+        return em.find(User.class, id);  // 영속화된 객체
+    }
 }

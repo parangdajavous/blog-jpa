@@ -65,4 +65,29 @@ public class UserController {
         return "redirect:/login-form";
     }
 
+
+    @GetMapping("/user/update-form")
+    public String updateForm() {
+        // 인증로직
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다.");
+
+        // ViewResolver -> prefix = /templates/  suffix = .mustache
+        return "user/update-form";
+    }
+
+    @PostMapping("/user/update")
+    public String update(UserRequest.UpdateDTO updateDTO) {
+        // 인증로직
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다.");
+
+        User user = userService.회원정보수정(updateDTO, sessionUser.getId());
+
+        // session 동기화 -> 동기화 안해주면 바꾸기 전 정보를 보게 된다
+        session.setAttribute("sessionUser", user);
+        
+        return "redirect:/";
+
+    }
 }

@@ -49,4 +49,13 @@ public class UserService {
         }
         return dto;
     }
+
+    @Transactional
+    public User 회원정보수정(UserRequest.UpdateDTO updateDTO, Integer userId) {
+        User user = userRepository.findById(userId);
+        if (user == null) throw new RuntimeException("회원을 찾을 수 없습니다");
+
+        user.update(updateDTO.getPassword(), updateDTO.getEmail());  // 영속화된 객체의 상태변경
+        return user;
+    }  // 함수 종료될 때 더티체킹 -> 상태가 변경되면 변경된 data를 가지고 update을 한다
 }
