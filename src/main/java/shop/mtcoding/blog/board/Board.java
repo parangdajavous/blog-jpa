@@ -9,6 +9,7 @@ import shop.mtcoding.blog.user.User;
 
 import java.sql.Timestamp;
 
+
 @NoArgsConstructor
 @Getter
 @Table(name = "board_tb")
