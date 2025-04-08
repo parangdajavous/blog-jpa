@@ -39,7 +39,7 @@ public class BoardRepository {
     }
 
     public Board findByIdJoinUser(Integer id) {
-        // b -> board에 있는 필드만 프로잭션  fetch를 써야 board안에 있는 user 객체도 같이 프로잭션됨
+        // b -> board에 있는 필드만 프로잭션 / fetch를 써야 board안에 있는 user 객체도 같이 프로잭션됨
         Query query = em.createQuery("select b from Board b join fetch b.user u where b.id = :id", Board.class);  // inner join (on절은 생략가능하다) -> 객체지향 쿼리
         query.setParameter("id", id);
         return (Board) query.getSingleResult();
