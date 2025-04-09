@@ -32,9 +32,11 @@ public class BoardService {
         Love love = loveRepository.findByUserIdAndBoardId(userId, id);
         Boolean isLove = love == null ? false : true;
 
-        Long loveCount = loveRepository.findByLoveCount(board.getId());
+        Integer loveId = love == null ? null : love.getId();
 
-        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, userId, isLove, loveCount.intValue());
+        Long loveCount = loveRepository.findByBoardId(board.getId());
+
+        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, userId, isLove, loveCount.intValue(), loveId);
         return detailDTO;
     }
 }

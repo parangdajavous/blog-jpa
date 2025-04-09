@@ -18,10 +18,11 @@ public class BoardResponse {
         private Integer loveCount;
         private String username;
         private Timestamp createdAt;
+        private Integer loveId;
 
 
         // 템플릿엔진이 조건문 비교를 허용해주지 않기 때문에 필요함
-        public DetailDTO(Board board, Integer sessionUserId, Boolean isLove, Integer loveCount) {
+        public DetailDTO(Board board, Integer sessionUserId, Boolean isLove, Integer loveCount, Integer loveId) {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
@@ -31,6 +32,7 @@ public class BoardResponse {
             this.createdAt = board.getCreatedAt();
             this.isLove = isLove;
             this.loveCount = loveCount;
+            this.loveId = loveId;
         }
     }
 }

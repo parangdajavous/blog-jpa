@@ -23,7 +23,7 @@ public class LoveRepository {
         }
     }
 
-    public Long findByLoveCount(int boardId) {
+    public Long findByBoardId(int boardId) {
         Query query = em.createQuery("select count(lo) from Love lo where lo.board.id = :boardId");
         query.setParameter("boardId", boardId);
         Long count = (Long) query.getSingleResult();
@@ -34,4 +34,19 @@ public class LoveRepository {
         }
     }
 
+
+    public Love save(Love love) {
+        em.persist(love);
+        return love;
+    }
+
+    public void deleteById(Integer id) {
+        em.createQuery("delete from Love lo where lo.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
+    public Love findById(Integer id) {
+        return em.find(Love.class, id);
+    }
 }
