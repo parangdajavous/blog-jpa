@@ -44,4 +44,11 @@ public class BoardRepository {
         query.setParameter("id", id);
         return (Board) query.getSingleResult();
     }
+
+
+    public Board findByIdJoinUserAndReplies(Integer id) {
+        Query query = em.createQuery("select b from Board b join fetch b.user u left join fetch b.replies r join fetch r.user where b.id = :id", Board.class);  // left join (on절은 생략가능하다) -> 객체지향 쿼리
+        query.setParameter("id", id);
+        return (Board) query.getSingleResult();
+    }
 }

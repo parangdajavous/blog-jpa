@@ -26,7 +26,7 @@ public class BoardResponse {
 
 
         // 템플릿엔진이 조건문 비교를 허용해주지 않기 때문에 필요함
-        public DetailDTO(Board board, Integer sessionUserId, Boolean isLove, Integer loveCount, Integer loveId, List<Reply> replies) {
+        public DetailDTO(Board board, Integer sessionUserId, Boolean isLove, Integer loveCount, Integer loveId) {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
@@ -37,7 +37,7 @@ public class BoardResponse {
             this.isLove = isLove;
             this.loveCount = loveCount;
             this.loveId = loveId;
-            this.replies = replies;
+            this.replies = board.getReplies();
         }
     }
 }
