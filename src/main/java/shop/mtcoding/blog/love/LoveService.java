@@ -22,8 +22,11 @@ public class LoveService {
 
     @Transactional
     public LoveResponse.DeleteDTO 좋아요취소(Integer id) {
+
         Love lovePs = loveRepository.findById(id);
         if (lovePs == null) throw new RuntimeException("취소할 좋아요가 없습니다.");
+
+        // 권한체크 (lovePs.gerUser().getId() 비교 sessionUserId)
 
         Integer boardId = lovePs.getBoard().getId();
 
