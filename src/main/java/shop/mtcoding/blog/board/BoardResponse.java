@@ -4,6 +4,7 @@ import lombok.Data;
 import shop.mtcoding.blog.reply.Reply;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BoardResponse {
@@ -22,7 +23,23 @@ public class BoardResponse {
         private Timestamp createdAt;
         private Integer loveId;
 
-        private List<Reply> replies;
+        private List<ReplyDTO> replies;
+
+        @Data
+        // DetailDTO안에 있기 때문에 외부 클래스가 아닌 내부클래스
+        public class ReplyDTO {
+            private Integer id;
+            private String content;
+            private String username;
+            private Boolean isOwner;
+
+            public ReplyDTO(Reply reply, Integer sessionUserId) {
+                this.id = reply.getId();
+                this.content = reply.getContent();
+                this.username = reply.getUser().getUsername();
+                this.isOwner = reply.getUser().getId().equals(sessionUserId);
+            }
+        }
 
 
         // 템플릿엔진이 조건문 비교를 허용해주지 않기 때문에 필요함
@@ -37,7 +54,14 @@ public class BoardResponse {
             this.isLove = isLove;
             this.loveCount = loveCount;
             this.loveId = loveId;
-            this.replies = board.getReplies();
+
+            List<ReplyDTO> repliesDTO = new ArrayList<>();
+            for (Reply reply : board.getReplies()) {
+                ReplyDTO replyDTO = new ReplyDTO(reply, sessionUserId);
+                repliesDTO.add(replyDTO);
+            }
+            this.replies = repliesDTO;
         }
     }
 }
+
