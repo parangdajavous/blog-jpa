@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import shop.mtcoding.blog._core.error.ex.Exception401;
 import shop.mtcoding.blog.user.User;
 
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ public class BoardController {
     public String save(BoardRequest.SaveDTO saveDTO) {
         // 인증로직
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다.");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다.");
 
         boardService.글쓰기(saveDTO, sessionUser);
 
@@ -43,7 +44,7 @@ public class BoardController {
     public String saveForm() {
         // 인증로직
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다.");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다.");
 
         return "board/save-form";
     }
@@ -58,5 +59,26 @@ public class BoardController {
         BoardResponse.DetailDTO detailDTO = boardService.글상세보기(id, sessionUserId);
         request.setAttribute("model", detailDTO);
         return "board/detail";
+    }
+
+    @GetMapping("/board/{id}/update-form")
+    public String updateForm(@PathVariable("id") Integer id, HttpServletRequest request) {
+        // 인증로직
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다.");
+
+        BoardResponse.DetailDTO board = boardService.글상세보기(id, sessionUser.getId());
+        request.setAttribute("model", board);
+        return "board/update-form";
+    }
+
+    @PostMapping("/board/{id}/update")
+    public String update(@PathVariable("id") Integer id, BoardRequest.UpdateDTO updateDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다.");
+
+        boardService.게시글수정(updateDTO, id, sessionUser.getId());
+
+        return "redirect:/";
     }
 }

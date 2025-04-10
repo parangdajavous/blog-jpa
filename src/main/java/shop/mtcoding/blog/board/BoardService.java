@@ -4,6 +4,8 @@ package shop.mtcoding.blog.board;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blog._core.error.ex.Exception403;
+import shop.mtcoding.blog._core.error.ex.Exception404;
 import shop.mtcoding.blog.love.Love;
 import shop.mtcoding.blog.love.LoveRepository;
 import shop.mtcoding.blog.reply.ReplyRepository;
@@ -41,5 +43,20 @@ public class BoardService {
 
         BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, userId, isLove, loveCount.intValue(), loveId);
         return detailDTO;
+    }
+
+    @Transactional
+    public Board 게시글수정(BoardRequest.UpdateDTO updateDTO, Integer id, Integer sessionUserId) {
+        Board board = boardRepository.findById(id);
+        if (board == null) throw new Exception404("게시글을 찾을 수 없습니다");
+
+        if (!board.getUser().getId().equals(sessionUserId)) throw new Exception403("권한이 없습니다.");
+
+        board.update(updateDTO.getTitle(), updateDTO.getContent(), updateDTO.getIsPublic());
+
+        return board;
+    }
+
+    public void 게시글삭제() {
     }
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import shop.mtcoding.blog._core.error.ex.Exception401;
 import shop.mtcoding.blog.user.User;
 
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class ReplyController {
     public String save(ReplyRequest.SaveDTO reqDTO) {
         // 인증로직
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다.");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다.");
 
         replyService.댓글쓰기(reqDTO, sessionUser);
 
@@ -29,7 +30,7 @@ public class ReplyController {
     public String delete(@PathVariable("id") Integer id) {
         // 인증로직
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) throw new RuntimeException("인증이 필요합니다.");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다.");
 
         Integer boardId = replyService.댓글삭제(id, sessionUser.getId());
 

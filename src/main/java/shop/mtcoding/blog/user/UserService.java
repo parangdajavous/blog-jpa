@@ -3,6 +3,9 @@ package shop.mtcoding.blog.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blog._core.error.ex.Exception400;
+import shop.mtcoding.blog._core.error.ex.Exception401;
+import shop.mtcoding.blog._core.error.ex.Exception404;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,13 +16,18 @@ import java.util.Map;
 public class UserService {
     private final UserRepository userRepository;
 
+    // 401 > 인증 403 > 권한 404 > 자원 못찾음
+
     @Transactional
     public void 회원가입(UserRequest.JoinDTO joinDTO) {
         // 동일회원 있는지 검사
-//        User user = userRepository.findByUsername(joinDTO.getUsername());
-//        if (user != null) {
-//            throw new RuntimeException("동일한 username이 존재합니다.");
-//        }
+        try {
+            userRepository.save(joinDTO.toEntity());
+        } catch (Exception e) {
+            //Exceptiom 400 (Bad request -> 잘못된 요청입니다)
+            throw new Exception400("동일한 username 이 존재합니다.");
+        }
+
         // 회원가입
         userRepository.save(joinDTO.toEntity());
     }
@@ -27,11 +35,10 @@ public class UserService {
     public User 로그인(UserRequest.LoginDTO loginDTO) {
         // username,password 검사
         User user = userRepository.findByUsername(loginDTO.getUsername());
-        if (user == null) {
-            throw new RuntimeException("해당 username이 없습니다");
-        }
-        if (!(user.getPassword().equals(loginDTO.getPassword()))) {
-            throw new RuntimeException("해당 passward가 일치하지 않습니다");
+        if (user == null) throw new Exception401("username 혹은 password 가 일치하지 않습니다");
+
+        if (!user.getPassword().equals(loginDTO.getPassword())) {
+            throw new Exception401("username 혹은 password 가 일치하지 않습니다");
         }
 
         // 로그인
@@ -53,7 +60,9 @@ public class UserService {
     @Transactional
     public User 회원정보수정(UserRequest.UpdateDTO updateDTO, Integer userId) {
         User user = userRepository.findById(userId);
-        if (user == null) throw new RuntimeException("회원을 찾을 수 없습니다");
+
+        //Exception404
+        if (user == null) throw new Exception404("회원을 찾을 수 없습니다");
 
         user.update(updateDTO.getPassword(), updateDTO.getEmail());  // 영속화된 객체의 상태변경
         return user;
