@@ -30,7 +30,7 @@ public class LoveController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new RuntimeException("인증이 필요합니다.");
 
-        LoveResponse.DeleteDTO respDTO = loveService.좋아요취소(id);   // loveId
+        LoveResponse.DeleteDTO respDTO = loveService.좋아요취소(id, sessionUser.getId());   // loveId
 
         return Resp.ok(respDTO);
     }

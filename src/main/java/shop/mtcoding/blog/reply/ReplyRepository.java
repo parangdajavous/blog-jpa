@@ -19,5 +19,15 @@ public class ReplyRepository {
         return replies;
     }
 
+    public Reply findById(int id) {
+        return em.find(Reply.class, id);
+    }
 
+    public void save(Reply reply) {
+        em.persist(reply);
+    }
+
+    public void delete(Reply reply) {
+        em.remove(reply);
+    }
 }

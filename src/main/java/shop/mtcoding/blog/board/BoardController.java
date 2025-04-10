@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import shop.mtcoding.blog.user.User;
 
 @RequiredArgsConstructor
@@ -59,4 +60,16 @@ public class BoardController {
         request.setAttribute("model", detailDTO);
         return "board/detail";
     }
+
+    @GetMapping("/v2/board/{id}")
+    public @ResponseBody BoardResponse.DetailDTO v2Detail(@PathVariable("id") Integer id) {
+
+
+        // 비로그인 시 상세보기
+        Integer sessionUserId = 1;
+
+        BoardResponse.DetailDTO detailDTO = boardService.글상세보기(id, sessionUserId);
+        return detailDTO;
+    }
+
 }

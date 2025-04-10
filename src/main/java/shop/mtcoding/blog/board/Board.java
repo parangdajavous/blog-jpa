@@ -28,7 +28,7 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;  // ORM
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // cascade ->
     // board = one , reply = many , mappedBy -> FK의 주인 @OneToMany -> 조회용도
     private List<Reply> replies = new ArrayList<>();  //조회할 때만 넣기위함
 
