@@ -40,7 +40,7 @@
     // 2. username 중복체크
     async function checkUsernameAvailable() {
         let username = document.querySelector("#username").value;
-        let response = await fetch("/check-username-available/" + username);
+        let response = await fetch("/api/check-username-available/" + username);
         let responseBody = await response.json();
         // status = 200, msg = 성공, body: { "available" : true }
         isUsernameAvailable = responseBody.body.available;
