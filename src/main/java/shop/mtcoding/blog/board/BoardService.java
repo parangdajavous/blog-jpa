@@ -8,7 +8,6 @@ import shop.mtcoding.blog._core.error.ex.Exception403;
 import shop.mtcoding.blog._core.error.ex.Exception404;
 import shop.mtcoding.blog.love.Love;
 import shop.mtcoding.blog.love.LoveRepository;
-import shop.mtcoding.blog.reply.Reply;
 import shop.mtcoding.blog.reply.ReplyRepository;
 import shop.mtcoding.blog.user.User;
 
@@ -73,13 +72,12 @@ public class BoardService {
         Board boardPs = boardRepository.findById(id);
         if (boardPs == null) throw new Exception404("게시글을 찾을 수 없습니다");
 
-        // 댓글삭제
-        Reply replyPs = replyRepository.findById(boardPs.getId());
-
-
         if (!boardPs.getUser().getId().equals(sessionUserId)) throw new Exception403("권한이 없습니다.");
 
+        // 좋아요 삭제
+        loveRepository.deleteByBoardId(boardPs.getId());
+
         boardRepository.deleteById(id);
-        replyRepository.deleteById(replyPs.getId());
+
     }
 }

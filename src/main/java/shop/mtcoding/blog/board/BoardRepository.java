@@ -53,9 +53,7 @@ public class BoardRepository {
     }
 
     public void deleteById(Integer id) {
-        Query query = em.createQuery("delete from Board b where b.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
-
+        Board board = em.find(Board.class, id); // 영속성 컨텍스트에 넣기
+        em.remove(board); // 연관된 Reply들도 함께 삭제됨 (Cascade 동작)
     }
 }
