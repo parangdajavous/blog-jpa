@@ -51,4 +51,11 @@ public class BoardRepository {
         query.setParameter("id", id);
         return (Board) query.getSingleResult();
     }
+
+    public void deleteById(Integer id) {
+        Query query = em.createQuery("delete from Board b where b.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+
+    }
 }

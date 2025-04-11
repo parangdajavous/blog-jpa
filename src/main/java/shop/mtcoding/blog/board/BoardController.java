@@ -67,18 +67,27 @@ public class BoardController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new Exception401("인증이 필요합니다.");
 
-        BoardResponse.DetailDTO board = boardService.글상세보기(id, sessionUser.getId());
+        Board board = boardService.업데이트글보기(id, sessionUser.getId());
         request.setAttribute("model", board);
         return "board/update-form";
     }
 
     @PostMapping("/board/{id}/update")
-    public String update(@PathVariable("id") Integer id, BoardRequest.UpdateDTO updateDTO) {
+    public String update(@PathVariable("id") Integer id, BoardRequest.UpdateDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new Exception401("인증이 필요합니다.");
 
-        boardService.게시글수정(updateDTO, id, sessionUser.getId());
+        boardService.게시글수정(reqDTO, id, sessionUser.getId());
 
+        return "redirect:/board/" + id;
+    }
+
+    @PostMapping("/board/{id}/delete")
+    public String delete(@PathVariable("id") Integer id) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception401("인증이 필요합니다.");
+
+        boardService.게시글삭제(id, sessionUser.getId());
         return "redirect:/";
     }
 }
