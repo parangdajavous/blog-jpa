@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Aspect
-public class GlobalValidationHandler {
+public class GlobalValidationHandler {  // GlobalValidationHandler -> 관점에 따라 다르게 행동할 Object
 
     // 직전
     @Before("@annotation(shop.mtcoding.blog._core.error.anno.MyBefore)")
