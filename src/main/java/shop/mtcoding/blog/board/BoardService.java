@@ -26,8 +26,14 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public List<Board> 글목록보기(Integer userId) {
-        return boardRepository.findAll(userId);
+    public BoardResponse.DTO 글목록보기(Integer userId, Integer page) {
+        if (userId == null) {
+            List<Board> boards = boardRepository.findAll(page);
+            return new BoardResponse.DTO(boards, page - 1, page + 1);
+        } else {
+            List<Board> boards = boardRepository.findAll(userId, page);
+            return new BoardResponse.DTO(boards, page - 1, page + 1);
+        }
     }
 
     public BoardResponse.DetailDTO 글상세보기(Integer id, Integer userId) {

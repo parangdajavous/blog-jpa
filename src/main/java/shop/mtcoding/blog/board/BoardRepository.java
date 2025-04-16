@@ -18,21 +18,41 @@ public class BoardRepository {
         em.persist(board);
     }
 
-    public List<Board> findAll(Integer userId) {  // Integer를 써야 null을 넘길 수 있다
-        // 동적 query
-        String s1 = "select b from Board b where b.isPublic = true or b.user.id = :userId order by b.id desc";
-        String s2 = "select b from Board b where b.isPublic = true order by b.id desc";
-
-        Query query = null;
-        if (userId == null) {
-            query = em.createQuery(s2, Board.class);
-        } else {
-            query = em.createQuery(s1, Board.class);
-            query.setParameter("userId", userId);
-        }
+    // locahost:8080?page=0
+    public List<Board> findAll(int page) {
+        String sql = "select b from Board b where b.isPublic = true order by b.id desc";
+        Query query = em.createQuery(sql, Board.class);
+        query.setFirstResult(page * 3);
+        query.setMaxResults(3);
 
         return query.getResultList();
     }
+
+    public List<Board> findAll(Integer userId, int page) {
+        String sql = "select b from Board b where b.isPublic = true or b.user.id = :userId order by b.id desc";
+        Query query = em.createQuery(sql, Board.class);
+        query.setParameter("userId", userId);
+        query.setFirstResult(page * 3);
+        query.setMaxResults(3);
+        return query.getResultList();
+    }
+
+//    public List<Board> findAll(Integer userId) {  // Integer를 써야 null을 넘길 수 있다
+//        // 동적 query
+//        String s1 = "select b from Board b where b.isPublic = true or b.user.id = :userId order by b.id desc";
+//        String s2 = "select b from Board b where b.isPublic = true order by b.id desc";
+//
+//        Query query = null;
+//        if (userId == null) {
+//            query = em.createQuery(s2, Board.class);
+//        } else {
+//            query = em.createQuery(s1, Board.class);
+//            query.setParameter("userId", userId);
+//        }
+//
+//        return query.getResultList();
+//    }
+
 
     public Board findById(Integer id) {
         return em.find(Board.class, id);

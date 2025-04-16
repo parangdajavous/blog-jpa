@@ -9,6 +9,21 @@ import java.util.List;
 
 public class BoardResponse {
 
+    @Data
+    public static class DTO {
+        private List<Board> boards;
+        private Integer prev;
+        private Integer next;
+        private boolean isFirst;
+        private boolean isLast;
+
+        public DTO(List<Board> boards, Integer prev, Integer next) {
+            this.boards = boards;
+            this.prev = prev;
+            this.next = next;
+        }
+    }
+
     // 깊은 복사
     @Data
     public static class DetailDTO {
