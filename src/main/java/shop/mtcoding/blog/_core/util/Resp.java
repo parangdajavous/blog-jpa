@@ -11,11 +11,11 @@ public class Resp<T> {
     private T body;
 
 
-    public static <T> Resp<?> ok(T body) {
+    public static <B> Resp<?> ok(B body) {
         return new Resp<>(200, "성공", body);
     }
 
     public static <T> Resp<?> fail(Integer status, String msg) {
-        return new Resp(status, msg, null);
+        return new Resp<>(status, msg, null);
     }
 }

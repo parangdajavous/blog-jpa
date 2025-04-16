@@ -2,8 +2,10 @@ package shop.mtcoding.blog.reply;
 
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.user.User;
@@ -15,7 +17,7 @@ public class ReplyController {
     private final HttpSession session;
 
     @PostMapping("/reply/save")
-    public String save(ReplyRequest.SaveDTO reqDTO) {
+    public String save(@Valid ReplyRequest.SaveDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         replyService.댓글쓰기(reqDTO, sessionUser);

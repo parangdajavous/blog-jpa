@@ -7,15 +7,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import shop.mtcoding.blog._core.error.ex.Exception400;
 import shop.mtcoding.blog._core.util.Resp;
 
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -33,14 +30,6 @@ public class UserController {
     public String join(@Valid UserRequest.JoinDTO joinDTO, Errors errors) {  // @Valid 가 붙으면 invoke 하기 전에 리플렉션 타고 DTO 내부의 어노테이션을 확인해서 터지면 errors에 넣어준다
 
         // 부가로직 (유효성 검사) - 공통모듈 / 공통모듈화가 되어야지 함수화해서 재활용 가능
-        if (errors.hasErrors()) {
-            List<FieldError> fErrors = errors.getFieldErrors();
-
-            for (FieldError fieldError : fErrors) {
-                throw new Exception400(fieldError.getField() + ":" + fieldError.getDefaultMessage());
-            }
-
-        }
 
 
         // 유효성 검사
@@ -71,14 +60,7 @@ public class UserController {
     public String login(@Valid UserRequest.LoginDTO loginDTO, Errors errors, HttpServletResponse response) {  // 어노테이션 붙은 매개변수 옆에 Errors가 있어야 DTO에서 터지면 errors에 넣어줌. 그 사이에 다른 매개변수가 있으면 그 매개변수를 확인하기 때문에 자리 잘 확인하기
 
         // 부가로직(유효성 검사) - 공통모듈 / 공통모듈화가 되어야지 함수화해서 재활용 가능
-        if (errors.hasErrors()) {
-            List<FieldError> fErrors = errors.getFieldErrors();
 
-            for (FieldError fieldError : fErrors) {
-                throw new Exception400(fieldError.getField() + ":" + fieldError.getDefaultMessage());
-            }
-
-        }
 
         // 핵심로직 -> seesionUser ~  cookie
         User sessionUser = userService.로그인(loginDTO);
@@ -112,7 +94,7 @@ public class UserController {
     }
 
     @PostMapping("/user/update")
-    public String update(UserRequest.UpdateDTO updateDTO) {
+    public String update(@Valid UserRequest.UpdateDTO updateDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         User user = userService.회원정보수정(updateDTO, sessionUser.getId());
