@@ -18,7 +18,23 @@ public class BoardRepository {
         em.persist(board);
     }
 
-    // locahost:8080?page=0
+    // 그룹함수 -> Long으로 return  [test해서 무슨 타입으로 들어오는지 확인 필요]
+    // 1. 로그인 안 했을 때 -> 4개
+    // 3. 로그인 했을 때 -> ssar이 아니면 -> 4개
+    public Long totalCount() {
+        Query query = em.createQuery("select count(b) from Board b where b.isPublic = true", Long.class);  // 스칼라 data
+        return (Long) query.getSingleResult();
+    }
+
+    // 2. 로그인 했을 때 -> ssar -> 5개
+    public Long totalCount(int userId) {
+        Query query = em.createQuery("select count(b) from Board b where b.isPublic = true or b.user.id = :userId", Long.class);  // 스칼라 data
+        query.setParameter("userId", userId);
+        return (Long) query.getSingleResult();
+    }
+
+
+    // locahost:8080?page=0  -> 로그인 X
     public List<Board> findAll(int page) {
         String sql = "select b from Board b where b.isPublic = true order by b.id desc";
         Query query = em.createQuery(sql, Board.class);
@@ -28,6 +44,7 @@ public class BoardRepository {
         return query.getResultList();
     }
 
+    // 로그인 O
     public List<Board> findAll(Integer userId, int page) {
         String sql = "select b from Board b where b.isPublic = true or b.user.id = :userId order by b.id desc";
         Query query = em.createQuery(sql, Board.class);

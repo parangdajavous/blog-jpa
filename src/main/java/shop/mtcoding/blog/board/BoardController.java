@@ -24,9 +24,9 @@ public class BoardController {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         if (sessionUser == null) {
-            request.setAttribute("model", boardService.글목록보기(null, page));
+            request.setAttribute("model", boardService.글목록보기(null, page));  // 로그인 안 했을 때
         } else {
-            request.setAttribute("model", boardService.글목록보기(sessionUser.getId(), page));
+            request.setAttribute("model", boardService.글목록보기(sessionUser.getId(), page));  // 로그인 했을 때
         }
 
         return "board/list";
