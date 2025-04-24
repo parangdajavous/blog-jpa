@@ -21,8 +21,9 @@ public class BoardResponse {
         private boolean isFirst; // current  == 0
         private boolean isLast; // 다음페이지에서 못 넘어가게 계산 필요 -> totalCount, size = 3  totalPages == current
         private List<Integer> numbers;
+        private String keyword;
 
-        public DTO(List<Board> boards, Integer current, Integer totalCount) {
+        public DTO(List<Board> boards, Integer current, Integer totalCount, String keyword) {
             this.boards = boards;
             this.prev = current - 1;
             this.next = current + 1;
@@ -35,6 +36,7 @@ public class BoardResponse {
             this.isLast = (totalPage - 1) == current;  // totalPages는 1부터 시작하는데 current는 0부터 시작하니까 totalPages-1 필요
             System.out.println("isLast: " + isLast);
             this.numbers = makeNumbers(current, totalPage);
+            this.keyword = keyword;  // null이거나 값이 있거나
         }
 
         // page 계산 함수

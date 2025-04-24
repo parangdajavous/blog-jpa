@@ -26,15 +26,15 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public BoardResponse.DTO 글목록보기(Integer userId, Integer page) {
+    public BoardResponse.DTO 글목록보기(Integer userId, Integer page, String keyword) {
         if (userId == null) {
-            Long totalCount = boardRepository.totalCount();
-            List<Board> boards = boardRepository.findAll(page);
-            return new BoardResponse.DTO(boards, page, totalCount.intValue());   // 로그인 안 했을때
+            Long totalCount = boardRepository.totalCount(keyword);
+            List<Board> boards = boardRepository.findAll(page, keyword);
+            return new BoardResponse.DTO(boards, page, totalCount.intValue(), keyword);   // 로그인 안 했을때
         } else {
-            Long totalCount = boardRepository.totalCount(userId);
-            List<Board> boards = boardRepository.findAll(userId, page);
-            return new BoardResponse.DTO(boards, page, totalCount.intValue());  // 로그인 했을 때
+            Long totalCount = boardRepository.totalCount(userId, keyword);
+            List<Board> boards = boardRepository.findAll(userId, page, keyword);
+            return new BoardResponse.DTO(boards, page, totalCount.intValue(), keyword);  // 로그인 했을 때
         }
     }
 

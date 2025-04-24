@@ -45,7 +45,7 @@ public class BoardRepositoryTest {
         Integer userId = 1;
 
         // when
-        List<Board> boardList = boardRepository.findAll(userId);
+        List<Board> boardList = boardRepository.findAll(userId, null);
 
         // Lazy -> Board -> User(id=1)
         // Eager -> N+1  -> Board조회 -> 연관된 User 유저 수 만큼 주회
